@@ -22,8 +22,6 @@ const addTodo = async (req: Request, res: Response) => {
       completed: false,
       title,
       id: Date.now().toString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
       user: { connect: { id: user.id } },
       category: { connect: { id: categoryId } },
     },

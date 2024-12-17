@@ -1,30 +1,51 @@
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { changePassword } from "@/lib/auth";
+import { toast } from "@/hooks/use-toast";
 
 interface ChangePasswordModalProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProps) {
-  const [currentPassword, setCurrentPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
+export default function ChangePasswordModal({
+  isOpen,
+  onClose,
+}: ChangePasswordModalProps) {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically send a request to your backend to change the password
-    console.log('Changing password:', { currentPassword, newPassword })
-    onClose()
-  }
+    e.preventDefault();
+    changePassword(
+      { currentPassword, newPassword, revokeOtherSessions: true },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+        onError: (error) => {
+          toast({
+            title: "Error",
+            description: error.error.message || "Please try again.",
+            variant: "destructive",
+          });
+        },
+        onResponse: () => {
+          setCurrentPassword("");
+          setNewPassword("");
+        },
+      }
+    );
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -65,6 +86,5 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-
