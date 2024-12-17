@@ -1,5 +1,6 @@
 import { useQuery, queryOptions } from "@tanstack/react-query";
 import { TODOS_SERVICE } from "@/services/todosServices";
+import { useSession } from "@/lib/auth";
 
 export const todosQueryOptions = queryOptions({
   queryKey: ["todos"],
@@ -7,5 +8,9 @@ export const todosQueryOptions = queryOptions({
 });
 
 export const useTodos = () => {
-  return useQuery(todosQueryOptions);
+  const { data } = useSession();
+  return useQuery({
+    ...todosQueryOptions,
+    enabled: !!data,
+  });
 };
