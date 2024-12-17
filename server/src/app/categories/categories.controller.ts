@@ -18,8 +18,6 @@ const addCategory = async (req: Request, res: Response) => {
     data: {
       name,
       id: Date.now().toString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
       user: { connect: { id: user.id } },
     },
   });
