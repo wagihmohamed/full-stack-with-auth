@@ -6,12 +6,14 @@ import { useSession, signOut, signIn, signUp } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "./ThemeToggle";
 import { useQueryClient } from "@tanstack/react-query";
+import DeleteAccountModal from "./DeleteAccountModal";
 
 export default function Sidebar() {
   const { data, isPending } = useSession();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [isDeleteAccountOpen, setIsDeleteAccountOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const handleSuccess = ({
@@ -88,6 +90,12 @@ export default function Sidebar() {
             <Button onClick={() => setIsChangePasswordOpen(true)}>
               Change Password
             </Button>
+            <Button
+              variant="destructive"
+              onClick={() => setIsDeleteAccountOpen(true)}
+            >
+              Delete Account
+            </Button>
           </>
         ) : (
           <Button onClick={() => setIsAuthModalOpen(true)}>
@@ -99,6 +107,12 @@ export default function Sidebar() {
         isOpen={isChangePasswordOpen}
         onClose={() => setIsChangePasswordOpen(false)}
       />
+      {!isPending && data ? (
+        <DeleteAccountModal
+          isOpen={isDeleteAccountOpen}
+          onClose={() => setIsDeleteAccountOpen(false)}
+        />
+      ) : null}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}

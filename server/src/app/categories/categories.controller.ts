@@ -17,7 +17,6 @@ const addCategory = async (req: Request, res: Response) => {
   const newCategory = await prisma.category.create({
     data: {
       name,
-      id: Date.now().toString(),
       user: { connect: { id: user.id } },
     },
   });
