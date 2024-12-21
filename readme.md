@@ -107,7 +107,3 @@ The application should now be running at [http://localhost:5173](http://localhos
 
 - `npm start`: Start the backend server
 - `npm run migrate`: Run Prisma migrations
-
-```
-
-```
